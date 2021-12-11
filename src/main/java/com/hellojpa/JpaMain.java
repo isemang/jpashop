@@ -61,15 +61,53 @@ public class JpaMain {
         /* 4. JPQL 이용 */
         //JPQL : 쿼리를 짜는 거긴 하지만, SQL처럼 RDB 종속적인 쿼리가 아니라 "객체"에 종속적인 쿼리를 짤 수 있음
         //또한 ORACLE에서 My Sql로 바꿔도 전~혀 코드상에서 바꿀 필요가 없음
-        try {
-            List<Member> result = em.createQuery("select m from Member as m")
-                    .setFirstResult(1)
-                    .setMaxResults(8)
-                    .getResultList();
+//        try {
+//            List<Member> result = em.createQuery("select m from Member as m")
+//                    .setFirstResult(1)
+//                    .setMaxResults(8)
+//                    .getResultList();
+//
+//            for (Member member : result) {
+//                System.out.println("member.getName() = " + member.getName());
+//            }
+//            tx.commit();
+//        } catch (Exception e) {
+//            tx.rollback();
+//        } finally {
+//            em.close();
+//        }
 
-            for (Member member : result) {
-                System.out.println("member.getName() = " + member.getName());
-            }
+        /* 5. 쓰기지연 SQL 저장소 */
+        try {
+
+            //영속
+            Member member1 = new Member(150L, "A");
+            Member member2 = new Member(160L, "B");
+
+            em.persist(member1);
+            em.persist(member2);
+
+            System.out.println("==================");
+
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            em.close();
+        }
+
+        /* 6. 엔티티 수정, 변경 감지 */
+        try {
+
+            //영속
+            Member member = em.find(Member.class, 150L);
+            member.setName("ZZZZ");
+
+            //em.persist 안해도 됨
+//            em.persist(member);
+
+            System.out.println("==================");
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
