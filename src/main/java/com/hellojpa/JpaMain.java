@@ -78,34 +78,53 @@ public class JpaMain {
 //        }
 
         /* 5. 쓰기지연 SQL 저장소 */
-        try {
-
-            //영속
-            Member member1 = new Member(150L, "A");
-            Member member2 = new Member(160L, "B");
-
-            em.persist(member1);
-            em.persist(member2);
-
-            System.out.println("==================");
-
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-        } finally {
-            em.close();
-        }
+//        try {
+//
+//            //영속
+//            Member member1 = new Member(150L, "A");
+//            Member member2 = new Member(160L, "B");
+//
+//            em.persist(member1);
+//            em.persist(member2);
+//
+//            System.out.println("==================");
+//
+//            tx.commit();
+//        } catch (Exception e) {
+//            tx.rollback();
+//        } finally {
+//            em.close();
+//        }
 
         /* 6. 엔티티 수정, 변경 감지 */
+//        try {
+//
+//            //영속
+//            Member member = em.find(Member.class, 150L);
+//            member.setName("ZZZZ");
+//
+//            //em.persist 안해도 됨
+////            em.persist(member);
+//
+//            System.out.println("==================");
+//
+//            tx.commit();
+//        } catch (Exception e) {
+//            tx.rollback();
+//        } finally {
+//            em.close();
+//        }
+
+        /* 7.플러시 */
         try {
 
             //영속
-            Member member = em.find(Member.class, 150L);
-            member.setName("ZZZZ");
+            Member member = new Member(200L, "member200");
+            em.persist(member);
 
-            //em.persist 안해도 됨
-//            em.persist(member);
-
+            //플러시 강제 호출
+            em.flush();
+            
             System.out.println("==================");
 
             tx.commit();
