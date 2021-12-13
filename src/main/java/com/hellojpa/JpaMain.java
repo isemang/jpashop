@@ -116,17 +116,41 @@ public class JpaMain {
 //        }
 
         /* 7.플러시 */
+//        try {
+//
+//            //영속
+//            Member member = new Member(200L, "member200");
+//            em.persist(member);
+//
+//            //플러시 강제 호출
+//            em.flush();
+//
+//            System.out.println("==================");
+//
+//            tx.commit();
+//        } catch (Exception e) {
+//            tx.rollback();
+//        } finally {
+//            em.close();
+//        }
+
+        /* 준영속 : 영속성 컨텍스트가 제공하는 기능 사용 불가 */
         try {
 
-            //영속
-            Member member = new Member(200L, "member200");
-            em.persist(member);
+            //영속상태
+            Member member = em.find(Member.class, 150L);
+            member.setName("AAAAA");
 
-            //플러시 강제 호출
-            em.flush();
-            
+            //준영속 상태로 변경, JPA에서 관리 안하도록 만듬
+//            em.detach(member);
+            em.clear(); //엔티티 매니저 속 영속성 컨텍스트가 통째로 다 지워짐
+
+            //영속성 컨텍스트 clear로 인해 1차캐시에 없음, 같은맴버 재조회 시 셀렉트 쿼리 또 나감
+            Member member2 = em.find(Member.class, 150L);
+
             System.out.println("==================");
 
+            //JPA에서 관리 안하도록 만들었으니 데이터를 변경했음에도 업데이트 안됨
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
