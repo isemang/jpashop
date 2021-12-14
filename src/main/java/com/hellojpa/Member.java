@@ -1,36 +1,39 @@
 package com.hellojpa;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
+@Getter
+@Setter
 public class Member {
 
     @Id
-    private Long id;
-    private String name;
+    private Long id;    //PK
 
+    @Column(name = "name")
+    private String username;    //컬럼명은 name, 객체에선 username으로 사용
+
+    private Integer age;
+
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;  //객체에서 Enumtype을 사용하고 싶으면 -> Enumerated annotation 사용
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;   //java의 dateclass : 날짜랑 시간 다 있는데, DB에는 시간, 날짜, 날짜시간 다 구분되어있음
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastModifiedDate;
+
+    @Lob
+    private String description;     //큰 형식(clob)
+
+    @Transient
+    private int temp;   //DB랑 관계없이 만든 변수이면 Transient 어노테이션 이용 -> DB매핑 안해줌
+    
     public Member() {
-    }
-
-    public Member(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }
