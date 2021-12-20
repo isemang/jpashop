@@ -2,26 +2,35 @@ package com.hellojpa;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
-@SequenceGenerator(
-        name = "MEMBER_SEQ_GENERATOR",
-        sequenceName = "MEMBER_SEQ", //매핑할 데이터베이스 시퀀스 이름
-        initialValue = 1, allocationSize = 1)
+@ToString
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-            generator = "MEMBER_SEQ_GENERATOR")
-    private Long id;    //PK
+    @GeneratedValue
+    @Column(name = "MEMBER_ID")
+    private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String username;    //컬럼명은 name, 객체에선 username으로 사용
+    @Column(name = "USERNAME")
+    private String username;
 
-    public Member() {
+    @Column(name = "TEAM_ID")   //참조 대신 외래키를 그대로 사용
+    private Long teamId;
+
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    //하나의 팀에 여러 사람이 소속됨 -> manyToOne(member입장에선 many, team입장에서는 one)
+    private Team team;  //Team과 Member의 관계가 일대다, 다대일 관계인지 알려줘야 함
+
+    //연간관계 편의 메서드 사용!!
+    public void changeTeam(Team team) {
+        this.team = team;
+        team.getMembers().add(this);
     }
 }
