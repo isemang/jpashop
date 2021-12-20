@@ -23,6 +23,10 @@ public class Member {
     @Column(name = "TEAM_ID")   //참조 대신 외래키를 그대로 사용
     private Long teamId;
 
+    @OneToOne
+    @JoinColumn(name = "LOCKER_ID")
+    private Locker locker;
+
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
     //하나의 팀에 여러 사람이 소속됨 -> manyToOne(member입장에선 many, team입장에서는 one)
