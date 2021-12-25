@@ -159,14 +159,20 @@ public class JpaMain {
 //        }
 
         try {
-            Member member = new Member();
 
-            member.setUsername("C");
+            Movie movie = new Movie();
+            movie.setDirector("A");
+            movie.setActor("BBB");
+            movie.setName("바람과함께사라지다");
+            movie.setPrice(10000);
 
-            System.out.println("============");
-            em.persist(member);
-            System.out.println("member.getId() = " + member.getId());
-            System.out.println("============");
+            em.persist(movie);
+
+            em.flush();
+            em.clear();
+
+            Movie findMovie = em.find(Movie.class, movie.getId());
+
 
             tx.commit();
         } catch (Exception e) {
